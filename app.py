@@ -67,7 +67,7 @@ age = st.sidebar.number_input("Age", min_value=10, max_value=100, value=30)
 
 # Function to send API request to Flask
 def predict_diabetes(features):
-    url = "http://127.0.0.1:5000/predict"  # Flask API URL
+    url = "https://diabetes-prediction-model-2ykw.onrender.com/"  # Flask API URL
     payload = {"features": features}  # JSON format
     response = requests.post(url, json=payload)
     
