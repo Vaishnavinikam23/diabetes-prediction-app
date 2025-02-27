@@ -11,18 +11,19 @@ st.markdown("""
     <style>
         .main-title {
             text-align: center;
-            color: #2C3E50;
+            color: #154360; /* Dark Teal */
             font-size: 36px;
             font-weight: bold;
         }
         .subtitle {
             text-align: center;
-            color: #7F8C8D;
+            color: #154360; /* Same Dark Teal */
             font-size: 18px;
+            font-weight: normal;
         }
         .stButton > button {
             background-color: #D6EAF8;
-            color: #2C3E50;
+            color: #154360;
             font-size: 18px;
             padding: 10px 20px;
             border-radius: 10px;
@@ -65,16 +66,17 @@ bmi = st.sidebar.number_input("BMI", min_value=10.0, max_value=50.0, value=25.0)
 dpf = st.sidebar.number_input("Diabetes Pedigree Function", min_value=0.0, max_value=2.5, value=0.5)
 age = st.sidebar.number_input("Age", min_value=10, max_value=100, value=30)
 
-# Function to send API request to Flask
 def predict_diabetes(features):
-    url = "https://diabetes-prediction-model-2ykw.onrender.com/"  # Flask API URL
-    payload = {"features": features}  # JSON format
-    response = requests.post(url, json=payload)
     
+    url = "https://diabetes-prediction-model-putg.onrender.com/predict"  # Render ka API URL
+    payload = {"features": features}  
+    response = requests.post(url, json=payload)
+
     if response.status_code == 200:
-        return response.json()["prediction"]  # API se prediction result
+        return response.json().get("prediction", "Error: No prediction key in response")
     else:
-        return "Error: API not responding"
+        return f"Error: API not responding, Status Code: {response.status_code}"
+
 
 # Prediction Button
 if st.sidebar.button("🔍 Predict Diabetes"):
@@ -86,4 +88,5 @@ if st.sidebar.button("🔍 Predict Diabetes"):
     elif result == 0:
         st.markdown('<div class="prediction-box non-diabetic">✅ Non-Diabetic - Your health is in good condition.</div>', unsafe_allow_html=True)
     else:
-        st.error("❌ API Error: Unable to get prediction. Check if Flask is running.")
+        st.error("❌ API Error: Unable to get prediction. Check if Flask is running.")  
+

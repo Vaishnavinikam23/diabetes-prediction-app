@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
-import pickle  # Import pickle
+from flask_cors import CORS  # Import CORS
+import pickle
 import numpy as np
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # Load the trained model
 with open("diabetes_model.pkl", "rb") as file:
@@ -28,5 +30,13 @@ def predict():
     return jsonify({"prediction": int(prediction[0])})
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(host="0.0.0.0", port=10000, debug=True)
 
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS  # Import CORS
+import pickle
+import numpy as np
+
+app = Flask(__name__)
+CORS(app)  # Enable CORS globally
