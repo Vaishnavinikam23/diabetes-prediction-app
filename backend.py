@@ -1,16 +1,15 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS  
 import pickle
 import numpy as np
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)  
 
-# Load the trained model
+# Load Model & Scaler
 with open("diabetes_model.pkl", "rb") as file:
     model = pickle.load(file)
 
-# Load the scaler
 with open("scaler.pkl", "rb") as file:
     scaler = pickle.load(file)
 
@@ -22,21 +21,9 @@ def home():
 def predict():
     data = request.json  
     features = np.array(data["features"]).reshape(1, -1)
-    
-    # Normalize features using the same scaler used during training
-    features_scaled = scaler.transform(features)
-
+    features_scaled = scaler.transform(features)  
     prediction = model.predict(features_scaled)
     return jsonify({"prediction": int(prediction[0])})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000, debug=True)
-
-
-from flask import Flask, request, jsonify
-from flask_cors import CORS  # Import CORS
-import pickle
-import numpy as np
-
-app = Flask(__name__)
-CORS(app)  # Enable CORS globally
