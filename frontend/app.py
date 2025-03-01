@@ -19,7 +19,7 @@ diabetes_pedigree_function = st.sidebar.number_input("Diabetes Pedigree Function
 age = st.sidebar.number_input("Age", min_value=10, max_value=100, value=30)
 
 def predict_diabetes(features):
-    url = "http://127.0.0.1:10000/predict"  # Local Flask URL
+    url = "https://diabetes-prediction-app-u88a.onrender.com/"  # Local Flask URL
     payload = {"features": features}
     response = requests.post(url, json=payload)
     
