@@ -19,16 +19,24 @@ diabetes_pedigree_function = st.sidebar.number_input("Diabetes Pedigree Function
 age = st.sidebar.number_input("Age", min_value=10, max_value=100, value=30)
 
 def predict_diabetes(features):
-    url = "https://diabetes-prediction-app-u88a.onrender.com/"  # Local Flask URL
+    url = "https://diabetes-prediction-app-u88a.onrender.com/predict"  # Correct API URL
     payload = {"features": features}
-    response = requests.post(url, json=payload)
-    
-    if response.status_code == 200:
-        return response.json().get("prediction", "Error: No prediction key in response")
-    else:
-        return f"Error: API not responding, Status Code: {response.status_code}"
+
+    try:
+        response = requests.post(url, json=payload)
+        response.raise_for_status()  # Raises an error for bad status codes
+
+        data = response.json()
+        return data.get("prediction", "Error: No prediction key in response")
+
+    except requests.exceptions.RequestException as e:
+        return f"Error: API request failed ({e})"
+
 if st.sidebar.button("🔍 Predict Diabetes"):
-    result = predict_diabetes([pregnancies, glucose, blood_pressure, skin_thickness, insulin, bmi, diabetes_pedigree_function, age])
+    result = predict_diabetes([
+        pregnancies, glucose, blood_pressure, skin_thickness, insulin,
+        bmi, diabetes_pedigree_function, age
+    ])
 
     st.subheader("🩺 **Prediction Result**")
     if result == 1:
@@ -36,5 +44,4 @@ if st.sidebar.button("🔍 Predict Diabetes"):
     elif result == 0:
         st.success("✅ **Non-Diabetic - Your health is in good condition.**")
     else:
-        st.warning("❌ **API Error: Unable to get prediction.**")
-
+        st.warning(f"❌ **API Error: {result}**")
