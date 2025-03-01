@@ -45,3 +45,16 @@ with open("scaler.pkl", "wb") as file:
 print("✅ Model aur Scaler successfully save ho gaye!")
 
 
+import pickle
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier  # Example, replace with your model
+
+# Load model
+with open("model.pkl", "rb") as file:
+    model = pickle.load(file)
+
+# Save it again with updated dependencies
+with open("model_fixed.pkl", "wb") as file:
+    pickle.dump(model, file)
+
+print("Model re-saved successfully as model_fixed.pkl")
