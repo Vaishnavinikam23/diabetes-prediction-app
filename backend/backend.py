@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS  
 import pickle
@@ -26,4 +27,5 @@ def predict():
     return jsonify({"prediction": int(prediction[0])})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000, debug=True)
+    port = int(os.environ.get("PORT", 10000))  # Render assigns PORT dynamically
+    app.run(host="0.0.0.0", port=port, debug=True)
